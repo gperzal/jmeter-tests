@@ -1,4 +1,3 @@
-
 # 🔧 API Dummy + JMeter Performance Testing
 
 <div align="center">
@@ -24,11 +23,11 @@ To simulate realistic performance tests under concurrent load using JMeter, whil
 
 ## 🛠️ Tech Stack
 
-| Tool           | Purpose                                |
-|----------------|----------------------------------------|
-| ⚙️ Node.js     | API dummy server with Express           |
-| 🐳 Docker      | Containerized app and test runner       |
-| 🧪 JMeter      | Load and performance testing tool       |
+| Tool              | Purpose                                     |
+| ----------------- | ------------------------------------------- |
+| ⚙️ Node.js        | API dummy server with Express               |
+| 🐳 Docker         | Containerized app and test runner           |
+| 🧪 JMeter         | Load and performance testing tool           |
 | 🔄 GitHub Actions | CI pipeline to automate performance testing |
 
 ---
@@ -58,6 +57,7 @@ project-root/
 ## 🧪 How to Run Performance Tests
 
 ### 🖥️ Locally with Docker & JMeter
+
 ```bash
 # 1. Start the dummy API
 cd app-dummy
@@ -75,6 +75,7 @@ xdg-open jmeter/report/index.html # Linux
 ### 🔁 Via GitHub Actions
 
 Each push to `main` or PR triggers a CI job that:
+
 - Builds and runs the Docker-based API
 - Waits until `/api/ping` responds
 - Executes JMeter test inside container
@@ -86,11 +87,12 @@ Each push to `main` or PR triggers a CI job that:
 
 ```mermaid
 graph TD
-    A[Push or PR to main] --> B[📦 Checkout repository]
-    B --> C[🐳 Docker Compose up (API)]
-    C --> D[⏳ Wait for /api/ping]
-    D --> E[🧪 Run JMeter test]
-    E --> F[📈 Upload HTML report as artifact]
+  A[📦 Push or PR] --> B[📥 Checkout repository]
+  B --> C[🐳 Docker Compose up]
+  C --> D[⏳ Wait for /api/ping]
+  D --> E[🧪 Run JMeter test]
+  E --> F[📈 Upload HTML report]
+
 ```
 
 ✅ You can find this logic in `.github/workflows/main.yml`
@@ -99,12 +101,12 @@ graph TD
 
 ## 📦 Best Practices Followed
 
-| ✅ | Principle                        | Implementation                          |
-|----|----------------------------------|------------------------------------------|
-| ✅ | Clean repo                       | `node_modules`, `report/`, `.jtl` ignored |
-| ✅ | Automation ready                 | Fully Dockerized setup                   |
-| ✅ | Reproducibility                  | CI runs test from fresh environment      |
-| ✅ | Artifact retention               | Report stored for 30 days only           |
+| ✅  | Principle          | Implementation                            |
+| --- | ------------------ | ----------------------------------------- |
+| ✅  | Clean repo         | `node_modules`, `report/`, `.jtl` ignored |
+| ✅  | Automation ready   | Fully Dockerized setup                    |
+| ✅  | Reproducibility    | CI runs test from fresh environment       |
+| ✅  | Artifact retention | Report stored for 30 days only            |
 
 ---
 
