@@ -7,7 +7,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue)](https://docs.docker.com/compose/)
 [![JMeter](https://img.shields.io/badge/JMeter-5.5-red)](https://jmeter.apache.org/)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/gperzal/main.yml?label=GitHub%20Actions)](https://github.com/gperzal)
+[![CI](https://github.com/gperzal/jmeter-tests/actions/workflows/jmeter-test.yml/badge.svg?branch=main)](https://github.com/gperzal/jmeter-tests/actions/workflows/jmeter-test.yml)
 
 </div>
 
