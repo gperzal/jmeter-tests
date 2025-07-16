@@ -12,22 +12,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout repository
-      uses: actions/checkout@v4
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
 
-    - name: 🧪 Run JMeter test via Docker Compose
-      run: docker compose up --build --abort-on-container-exit
+      - name: 🧪 Run JMeter test via Docker Compose
+        working-directory: app-dummy  # ⬅️ Ajusta si tu archivo está en esta carpeta
+        run: docker compose up --build --abort-on-container-exit
 
-    - name: 📤 Upload HTML report
-      uses: actions/upload-artifact@v4
-      with:
-        name: jmeter-html-report
-        path: jmeter/report
-        retention-days: 30
+      - name: 📤 Upload HTML report
+      - name: 📤 Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-html-report
+          path: jmeter/report
+          retention-days: 30
 
-    - name: 📤 Upload raw .jtl results
-      uses: actions/upload-artifact@v4
-      with:
-        name: jmeter-raw-results
-        path: jmeter/resultados.jtl
-        retention-days: 30
+      - name: 📤 Upload raw .jtl results
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-raw-results
+          path: jmeter/resultados.jtl
+          retention-days: 30
