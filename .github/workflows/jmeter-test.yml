@@ -12,45 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 📥 1. Checkout repository
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
 
-    # 🐳 2. Build and start the dummy API using Docker Compose
-    - name: 🛠️ Build & Launch Dummy API with Docker Compose
-      working-directory: app-dummy
-      run: docker compose up -d --build
+    - name: 🧪 Run JMeter test via Docker Compose
+      run: docker compose up --build --abort-on-container-exit
 
-    # ⏳ 3. Wait for the API to become available (responding with "pong")
-    - name: ⏱️ Wait for the API to be ready
-      run: |
-        for i in {1..10}; do
-          if curl -s http://app:3000/api/ping | grep -q pong; then
-            echo "✅ API is up and running"
-            break
-          fi
-          echo "⏳ Waiting for the API to respond..."
-          sleep 5
-        done
-
-
-    # 🧪 4. Run the JMeter test using the justb4/jmeter Docker image
-    - name: 🧪 Execute JMeter performance test
-      run: |
-        docker run --rm \
-          --network app-dummy_jmeter-net \
-          -v ${{ github.workspace }}/jmeter:/tests \
-          -w /tests \
-          justb4/jmeter \
-          -n -t test-plan.jmx \
-          -l resultados.jtl \
-          -e -o report
-
-
-    # 📤 5. Upload the HTML performance report as an artifact
     - name: 📤 Upload HTML report
       uses: actions/upload-artifact@v4
       with:
         name: jmeter-html-report
         path: jmeter/report
+        retention-days: 30
+
+    - name: 📤 Upload raw .jtl results
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-raw-results
+        path: jmeter/resultados.jtl
         retention-days: 30

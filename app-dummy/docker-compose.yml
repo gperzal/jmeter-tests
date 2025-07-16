@@ -1,9 +1,23 @@
 version: "3.8"
+
 services:
   app:
     build: .
     ports:
       - "3000:3000"
+    networks:
+      - jmeter-net
+
+  jmeter:
+    image: justb4/jmeter
+    command: >
+      -n -t /tests/test-plan.jmx
+      -l /tests/resultados.jtl
+      -e -o /tests/report
+    volumes:
+      - ./jmeter:/tests
+    depends_on:
+      - app
     networks:
       - jmeter-net
 
