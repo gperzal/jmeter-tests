@@ -25,7 +25,7 @@ jobs:
     - name: ⏱️ Wait for the API to be ready
       run: |
         for i in {1..10}; do
-          if curl -s http://localhost:3000/api/ping | grep -q pong; then
+          if curl -s http://app:3000/api/ping | grep -q pong; then
             echo "✅ API is up and running"
             break
           fi
@@ -33,16 +33,19 @@ jobs:
           sleep 5
         done
 
+
     # 🧪 4. Run the JMeter test using the justb4/jmeter Docker image
     - name: 🧪 Execute JMeter performance test
       run: |
         docker run --rm \
+          --network app-dummy_jmeter-net \
           -v ${{ github.workspace }}/jmeter:/tests \
           -w /tests \
           justb4/jmeter \
           -n -t test-plan.jmx \
           -l resultados.jtl \
           -e -o report
+
 
     # 📤 5. Upload the HTML performance report as an artifact
     - name: 📤 Upload HTML report
