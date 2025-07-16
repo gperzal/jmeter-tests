@@ -15,7 +15,7 @@ services:
       -l /tests/resultados.jtl
       -e -o /tests/report
     volumes:
-      - ./jmeter:/tests
+      - ../jmeter:/tests
     depends_on:
       - app
     networks:
