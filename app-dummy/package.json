@@ -1,0 +1,16 @@
+{
+  "name": "app-dummy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "jmeter": "jmeter -n -t jmeter/test-plan.JMX -l jmeter/resultados.jtl -e -o jmeter/report"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
