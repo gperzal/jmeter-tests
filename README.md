@@ -99,6 +99,76 @@ graph TD
 
 ---
 
+## ⚠️ Important Note: Docker Compose, Paths, Hostnames & Test Execution Strategy
+
+> 🔥 **Avoid common pitfalls when combining JMeter, Docker Compose, and GitHub Actions**
+
+### ✅ 1. Use correct file paths
+
+If your `docker-compose.yml` is inside a subdirectory (like `app-dummy/`), and your JMeter files live in a root-level `jmeter/` folder, you must mount the correct volume path:
+
+```yaml
+volumes:
+  - ../jmeter:/tests
+```
+
+And in your GitHub Actions workflow, make sure the job runs from the correct folder:
+
+```yaml
+working-directory: app-dummy
+```
+
+📁 This ensures JMeter will correctly find the test plan file at:
+
+```
+/tests/test-plan.jmx
+```
+
+❌ **If you omit the `../`, the container won't find your test plan and will fail with**:  
+`The file /tests/test-plan.jmx doesn't exist or can't be opened`
+
+
+
+---
+
+### ✅ 2. Reference Docker service names in your test plan
+
+JMeter must target the container's **service name**, not `localhost`. In `test-plan.jmx`, update:
+
+```xml
+<stringProp name="HTTPSampler.domain">app</stringProp>
+```
+
+This tells JMeter to route traffic internally through Docker's virtual network to the `app` service.
+
+---
+
+### ✅ 3. Moved test execution **from GitHub Actions to Docker Compose**
+
+Originally, the workflow ran the API (`npm start`) via Docker Compose, waited for it to be ready with `curl`, and then executed JMeter via a separate `docker run` command:
+
+```yaml
+- name: Wait for the API to be ready
+- name: Run JMeter test with justb4/jmeter
+```
+
+❌ This approach caused **network isolation issues** — `docker run` couldn't see the network created by `docker compose`.
+
+---
+
+### ✅ The solution: Run both `app` and `jmeter` as services within `docker-compose.yml`
+
+This ensures:
+- Both containers share the same internal Docker network.
+- You don't need manual waits (`curl` loops).
+- Test execution becomes portable (works locally + in CI with the same config).
+- The test runs **automatically** when you execute:
+
+```bash
+docker compose up --abort-on-container-exit
+```
+
+
 ## 📦 Best Practices Followed
 
 | ✅  | Principle          | Implementation                            |
